@@ -3,11 +3,11 @@ import { FiClock, FiInfo } from "react-icons/fi";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { useParams } from "react-router-dom";
 
-/* import Sidebar from "../components/Sidebar";
-import api from "../services/api"; */
+import { Sidebar } from "../../components/shared";
+import mapIcon from "../../utils/mapIcon";
+/* import api from "../services/api"; */
 
 import '../../styles/pages/orphanage.css';
-/* import mapIcon from "../utils/mapIcon"; */
 
 interface Orphanage {
   name: string; 
@@ -45,13 +45,10 @@ export default function Orphanage() {
 
   return (
     <div id="page-orphanage">
-      
-      {/* <Sidebar /> */}
-
+      <Sidebar />
       <main>
         <div className="orphanage-details">
           <img src={orphanage.images[activeImageIndex].url} alt={orphanage.name} />
-
           <div className="images">
             {orphanage.images.map((image, idx) => {
               return (
@@ -85,7 +82,7 @@ export default function Orphanage() {
                 <TileLayer 
                   url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
                 />
-                <Marker interactive={false} /* icon={mapIcon} */ position={[orphanage.latitude, orphanage.longitude]} />
+                <Marker interactive={false} icon={mapIcon} position={[orphanage.latitude, orphanage.longitude]} />
               </MapContainer>
 
               <footer>
