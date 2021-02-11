@@ -8,6 +8,7 @@ import mapIcon from "../../utils/mapIcon";
 /* import api from "../services/api"; */
 
 import '../../styles/pages/orphanage.css';
+import api from "../../services/api";
 
 interface Orphanage {
   name: string; 
@@ -28,16 +29,16 @@ interface OrphanageParams {
 
 export default function Orphanage() {
   const params = useParams<OrphanageParams>();
-  const [orphanage, setOrphanage] = useState<Orphanage>( );
+  const [orphanage, setOrphanage] = useState<Orphanage>();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  /* useEffect(()=>{
+  useEffect(() => {
     api.get(`orphanages/${params.id}`).then(response => {
       setOrphanage(response.data);
-    })
-  },[params.id]); */
+    });
+  }, [params.id]);
 
-  if(!orphanage) {
+  if (!orphanage) {
     return (
       <p>Carregando...</p>
     )
@@ -52,22 +53,20 @@ export default function Orphanage() {
           <div className="images">
             {orphanage.images.map((image, idx) => {
               return (
-                <button 
+                <button
                   key={image.id} 
                   className={activeImageIndex === idx ? "active" : ""} 
                   type="button"
                   onClick={() => setActiveImageIndex(idx)}
-                  >
+                >
                   <img src={image.url} alt={orphanage.name} />
                 </button>
               );
             })}
           </div>
-          
           <div className="orphanage-details-content">
             <h1>{orphanage?.name}</h1>
             <p>{orphanage?.about}</p>
-
             <div className="map-container">
               <MapContainer 
                 center={[orphanage.latitude, orphanage.longitude]} 
@@ -79,30 +78,22 @@ export default function Orphanage() {
                 scrollWheelZoom={false}
                 doubleClickZoom={false}
               >
-                <TileLayer 
-                  url={`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.REACT_APP_MAPBOX_TOKEN}`}
-                />
+                <TileLayer url="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 <Marker interactive={false} icon={mapIcon} position={[orphanage.latitude, orphanage.longitude]} />
               </MapContainer>
-
               <footer>
-                {/* <a href="https://www.google.com/maps/dir/?api=1&origin=34.1030032,-118.41046840000001&destination=34.059808,-118.368152">Ver rotas no Google Maps</a> */}
                 <a target="_blank" rel='noopener noreferrer' href={`https://www.google.com/maps/dir/?api=1&destination=${orphanage.latitude},${orphanage.longitude}`}>Ver rotas no Google Maps</a>
               </footer>
             </div>
-
             <hr />
-
             <h2>Instruções para visita</h2>
             <p>{orphanage.instructions}</p>
-
             <div className="open-details">
               <div className="hour">
                 <FiClock size={32} color="#15B6D6" />
                 Segunda à Sexta <br />
                 {orphanage.opening_hours}
               </div>
-
               {orphanage.open_on_weekends ? (
                 <div className="open-on-weekends">
                   <FiInfo size={32} color="#39CC83" />
@@ -116,9 +107,7 @@ export default function Orphanage() {
                   fim de semana
                 </div>
               )}
-              
             </div>
-            
           </div>
         </div>
       </main>
